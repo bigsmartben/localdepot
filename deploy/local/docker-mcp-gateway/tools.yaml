@@ -1,0 +1,11 @@
+trace-mcp:
+  - search
+  - get_outline
+  - get_symbol
+  - find_usages
+  - get_change_impact
+  - get_task_context
+  - get_call_graph
+  - get_project_map
+  - load_tools
+  - get_preset_info

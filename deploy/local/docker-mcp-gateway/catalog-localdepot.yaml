@@ -1,0 +1,9 @@
+registry:
+  trace-mcp:
+    name: trace-mcp
+    title: trace-mcp
+    description: Framework-aware code graph MCP (verification backend).
+    type: remote
+    remote:
+      transport_type: streamable-http
+      url: http://trace-mcp.project-localdepot-dev.svc.cluster.local:3741/mcp?project=/workspaces/project

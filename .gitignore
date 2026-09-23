@@ -1,0 +1,27 @@
+# Agent-generated working documents and recoverable cleanup quarantine
+.agents/work/
+.agents/reports/
+.agents/trash/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Workspace-local MCP indices / caches (mode A mount)
+.cache/
+.trace/
+.trace-mcp/
+.serena/
+
+# Generated secondary workspace overlays / catalog registrations
+deploy/local/overlays/
+deploy/local/gateway/secondaries/
