@@ -87,6 +87,7 @@ kubectl --context rancher-desktop -n project-localdepot-dev port-forward --addre
 | 项目 / ns | 本地端口 | Gateway URL |
 |-----------|----------|-------------|
 | localdepot / `project-localdepot-dev` | **18080** | `http://127.0.0.1:18080/mcp` |
+| mcpverify（codeup 统一 codebase）/ `project-mcpverify-dev` | **18082** | `http://127.0.0.1:18082/mcp` |
 
 > 本机 **8080** 常被 Rancher Desktop `host-switch` 占用；本地 port-forward 使用 **18080→svc:8080**，勿与集群内网关容器端口混淆。
 
@@ -101,6 +102,28 @@ kubectl --context rancher-desktop -n project-localdepot-dev port-forward --addre
 ```
 
 工具选择：**不在** mcp.json；见网关 ConfigMap `tools.yaml`。说明见 `examples/mcp-client/`。
+
+#### 3.3.1 统一 codebase 远程 + `projects`（mcpverify / codeup）
+
+`project-mcpverify-dev` 提供**一个**覆盖 `C:\Users\24598\Documents\codeup` 全部仓库的远程入口。各终端项目：
+
+- `url`：统一为 `http://127.0.0.1:18082/mcp`
+- `projects`：本会话需要查询的仓库目录名（相对 codeup 根），可一个或多个
+
+```json
+{
+  "mcpServers": {
+    "mcp-gateway": {
+      "url": "http://127.0.0.1:18082/mcp",
+      "projects": ["jzx-server"]
+    }
+  }
+}
+```
+
+Cursor 若不转发 `projects`：项目 Rule 要求 MCP 查询范围仅落在所列仓内。落地：`.\deploy\local\apply-workspace.ps1 -Instance mcpverify -WorkspacePath C:\Users\24598\Documents\codeup`；实例说明见 `deploy/local/instances/mcpverify/`。
+
+> **mcpverify 特例**：`TRACE_HOME` 放在挂载树外（`Documents\.cache\mcpverify-trace-home`），避免多仓挂载下 watcher 对缓存 DB 自触发再索引饿死事件循环。工作区仍挂 codeup 父根。
 
 ### 3.4 生命周期（项目 MCP ↔ K3s）
 

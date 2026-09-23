@@ -29,7 +29,7 @@
 |---|---|---|
 | Cursor Rules / Skills | 用户级 `~/.cursor`（及跨项目 alwaysApply Rules） | 可引用、可对照验证；不复制为仓内第二套权威 |
 | Agent Skills | 用户级 `~/.agents` 等 | 同上 |
-| **MCP 客户端 URL** | **项目** `.cursor/mcp.json` | **SSOT**：仅 `mcp-gateway` → 本项目可区分端口的 Gateway |
+| **MCP 客户端 URL** | **项目** `.cursor/mcp.json` | **SSOT**：`mcp-gateway` → 本项目可区分端口的 Gateway；统一 codebase 栈可另含 `projects`（要查询的仓库目录名列表，见 [delivery §3.3.1](delivery/local-oss-stack.md)） |
 | 工具白名单 | `deploy/local` 网关 `tools.yaml` | 协议级 list+call 裁切 |
 | 形状说明 | `examples/mcp-client/` | 说明；以仓库 `.cursor/mcp.json` 为准 |
 | **本地 K3s 工具区** | **`deploy/local/`** | **本仓维护**：本项目 Gateway、trace-mcp、白名单、挂载脚本 |

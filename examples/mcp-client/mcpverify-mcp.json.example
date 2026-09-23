@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mcp-gateway": {
+      "url": "http://127.0.0.1:18082/mcp",
+      "projects": ["REPLACE_WITH_REPO_DIRNAME"]
+    }
+  }
+}

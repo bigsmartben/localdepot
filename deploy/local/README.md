@@ -20,6 +20,7 @@ kubectl --context rancher-desktop -n project-localdepot-dev port-forward --addre
 - 第二工作区：`-Secondary` → overlay + **自动注册网关 catalog**（`gateway/secondaries/`、`--servers`）。
 - 注销第二工作区：`-Unregister -WorkspaceSlug <slug>`。
 - 仅重建 catalog：`-SyncCatalog`。
+- **统一 codebase 实例（codeup）**：`-Instance mcpverify -WorkspacePath C:\Users\24598\Documents\codeup` → `project-mcpverify-dev`，端口 **18082**（18081 常被其它项目占用）；客户端同 URL + `projects` 约定，见 [`instances/mcpverify/`](instances/mcpverify/)。
 - 工具白名单：ConfigMap `tools.yaml`（每 server 一份 allowlist）。
 
 一键（沿用已生成的 patch）：`kubectl --context rancher-desktop apply -k deploy/local`

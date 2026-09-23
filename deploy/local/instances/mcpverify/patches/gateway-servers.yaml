@@ -1,0 +1,21 @@
+# Single unified server (no per-repo catalog entries).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-mcp-gateway
+  namespace: project-mcpverify-dev
+spec:
+  template:
+    spec:
+      containers:
+        - name: gateway
+          args:
+            - --catalog=/root/.docker/mcp/catalogs/localdepot.yaml
+            - --servers=trace-mcp
+            - --tools-config=/root/.docker/mcp/tools.yaml
+            - --transport=streaming
+            - --port=8080
+            - --host=0.0.0.0
+            - --allow-unauthenticated
+            - --verify-signatures=false
+            - --verbose

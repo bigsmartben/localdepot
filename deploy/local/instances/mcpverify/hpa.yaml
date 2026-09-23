@@ -1,0 +1,46 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: docker-mcp-gateway
+  namespace: project-mcpverify-dev
+  labels:
+    app.kubernetes.io/name: docker-mcp-gateway
+    app.kubernetes.io/part-of: mcpverify
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: docker-mcp-gateway
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: trace-mcp
+  namespace: project-mcpverify-dev
+  labels:
+    app.kubernetes.io/name: trace-mcp
+    app.kubernetes.io/part-of: mcpverify
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: trace-mcp
+  minReplicas: 1
+  # Multi-replica needs Service sessionAffinity (ClientIP). Keep ceiling modest.
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
