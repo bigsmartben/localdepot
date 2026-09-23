@@ -1,0 +1,14 @@
+# Local base environment for localdepot (Rancher Desktop K3s only).
+# Preferred: .\deploy\local\apply-workspace.ps1 -WorkspacePath <WindowsPath>
+# Secondary: ... -Secondary  (registers into gateway catalog automatically)
+# Apply as-is: kubectl --context rancher-desktop apply -k deploy/local
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: project-localdepot-dev
+resources:
+  - docker-mcp-gateway.yaml
+  - gateway/configmap.yaml
+  - trace-mcp.yaml
+patches:
+  - path: patches/hostpath.yaml
+  - path: patches/gateway-servers.yaml

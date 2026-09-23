@@ -1,0 +1,15 @@
+---
+description: Scope MCP codebase queries to mcp.json projects (unified codeup remote)
+alwaysApply: true
+---
+
+# MCP projects scope (mcpverify)
+
+This terminal uses the **unified** codebase remote at `http://127.0.0.1:18082/mcp`.
+
+Read `.cursor/mcp.json` → `mcpServers.mcp-gateway.projects` (array of directory names under the codeup parent).
+
+When calling MCP tools (`search`, `get_project_map`, `get_symbol`, etc.):
+
+- Restrict paths and queries to those repositories only.
+- Do not search or cite symbols outside `projects` unless the user explicitly asks for cross-repo work and updates `projects`.

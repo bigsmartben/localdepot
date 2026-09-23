@@ -1,0 +1,14 @@
+# Unified codebase remote for codeup. Apply via:
+#   .\deploy\local\apply-workspace.ps1 -Instance mcpverify -WorkspacePath C:\Users\24598\Documents\codeup
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: project-mcpverify-dev
+resources:
+  - namespace.yaml
+  - docker-mcp-gateway.yaml
+  - gateway/configmap.yaml
+  - trace-mcp.yaml
+  - hpa.yaml
+patches:
+  - path: patches/hostpath.yaml
+  - path: patches/gateway-servers.yaml

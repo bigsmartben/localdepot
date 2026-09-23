@@ -1,0 +1,92 @@
+# Unified codebase backend: one mount of the codeup parent workspace.
+# TRACE_HOME is OUTSIDE the workspace mount — otherwise the file watcher
+# reindexes its own .cache DB and starves the MCP event loop.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trace-mcp
+  namespace: project-mcpverify-dev
+  labels:
+    app.kubernetes.io/name: trace-mcp
+    app.kubernetes.io/part-of: mcpverify
+    app.kubernetes.io/component: mcp-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: trace-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: trace-mcp
+        app.kubernetes.io/part-of: mcpverify
+        app.kubernetes.io/component: mcp-backend
+    spec:
+      containers:
+        - name: trace-mcp
+          image: localdepot/trace-mcp:3.31.3
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TRACE_PROJECT_ROOT
+              value: /workspaces/project
+            - name: TRACE_HOME
+              value: /var/trace-home
+            - name: TRACE_MCP_TELEMETRY
+              value: "off"
+          ports:
+            - name: mcp
+              containerPort: 3741
+          readinessProbe:
+            tcpSocket:
+              port: mcp
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            tcpSocket:
+              port: mcp
+            initialDelaySeconds: 120
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+          volumeMounts:
+            - name: workspace
+              mountPath: /workspaces/project
+            - name: trace-home
+              mountPath: /var/trace-home
+      volumes:
+        - name: workspace
+          hostPath:
+            # Placeholder — real path from patches/hostpath.yaml via apply-workspace -Instance.
+            path: /mnt/c/_SET_VIA_apply-workspace_
+            type: Directory
+        - name: trace-home
+          hostPath:
+            # Outside codeup so watcher does not see cache DB churn.
+            path: /mnt/c/Users/24598/Documents/.cache/mcpverify-trace-home
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trace-mcp
+  namespace: project-mcpverify-dev
+  labels:
+    app.kubernetes.io/name: trace-mcp
+    app.kubernetes.io/part-of: mcpverify
+spec:
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  selector:
+    app.kubernetes.io/name: trace-mcp
+  ports:
+    - name: mcp
+      port: 3741
+      targetPort: 3741
